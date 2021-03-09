@@ -80,5 +80,5 @@ inline fun <reified T : Any> Any.conventionPlugin(): T? =
  * @throws ClassCastException if the receiver object does not support conventions
  * @throws IllegalStateException if the convention plugin does not exist
  */
-internal inline fun <reified T : Any> Any.requiredConventionPlugin(): T =
+inline fun <reified T : Any> Any.requiredConventionPlugin(): T =
     ((this as ExtensionAware).extensions as Convention).getPlugin(T::class.java)
