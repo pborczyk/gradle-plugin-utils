@@ -15,8 +15,8 @@ subprojects {
 
     plugins.withId("org.jetbrains.kotlin.jvm") {
         dependencies {
-            "implementation"(kotlin("stdlib"))
-            "implementation"(kotlin("stdlib-jdk8"))
+            "compileOnly"(kotlin("stdlib"))
+            "compileOnly"(kotlin("stdlib-jdk8"))
         }
 
         tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

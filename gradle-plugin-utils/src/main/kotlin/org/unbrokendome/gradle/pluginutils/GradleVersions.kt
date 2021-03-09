@@ -38,7 +38,8 @@ object GradleVersions {
     val Version_6_7 by "6.7"
     val Version_6_8 by "6.8"
 
-    private operator fun String.getValue(thisRef: Any?, property: KProperty<*>): GradleVersion {
+    @Suppress("NOTHING_TO_INLINE")
+    private inline operator fun String.getValue(thisRef: Any?, property: KProperty<*>): GradleVersion {
         return GradleVersion.version(this)
     }
 }
