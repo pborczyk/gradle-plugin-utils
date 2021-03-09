@@ -49,7 +49,7 @@ fun Provider<String>.asGString(evalRoot: Any): Provider<String> =
  * @return the new [Provider], returning the URI
  */
 fun Provider<String>.toUri(): Provider<URI> =
-    map(::URI)
+    map { URI(it) }
 
 
 /**
