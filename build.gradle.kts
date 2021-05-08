@@ -41,14 +41,10 @@ subprojects {
                 withJavadocJar()
             }
 
-            val mavenJavaPublication = with(the<PublishingExtension>()) {
+            with(the<PublishingExtension>()) {
                 publications.create<MavenPublication>("mavenJava") {
                     from(components["java"])
                 }
-            }
-
-            with(the<SigningExtension>()) {
-                sign(mavenJavaPublication)
             }
         }
     }
@@ -99,6 +95,10 @@ subprojects {
                 url = uri("${rootProject.buildDir}/repos/releases")
             }
         }
+
+        with(the<SigningExtension>()) {
+            sign(publishing.publications)
+        }
     }
 
 
@@ -125,5 +125,12 @@ subprojects {
                 }
             }
         }
+    }
+}
+
+
+nexusPublishing {
+    repositories {
+        sonatype()
     }
 }
