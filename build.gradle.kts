@@ -1,12 +1,12 @@
 plugins {
     kotlin("jvm") apply false
     id("com.jfrog.bintray") version "1.8.5" apply false
-    id("org.jetbrains.dokka") version "1.4.20" apply false
+    id("org.jetbrains.dokka") version "1.4.32" apply false
 }
 
 allprojects {
     repositories {
-        jcenter()
+        mavenCentral()
     }
 }
 
