@@ -16,6 +16,7 @@ pluginManagement {
 rootProject.name = "gradle-plugin-utils-parent"
 
 include(
+    "bom",
     "gradle-plugin-integration-test-utils",
     "gradle-plugin-test-utils",
     "gradle-plugin-utils"

@@ -2,7 +2,6 @@ plugins {
     kotlin("jvm")
     `java-library`
     `maven-publish`
-    id("com.jfrog.bintray")
     id("org.jetbrains.dokka")
 }
 
