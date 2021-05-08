@@ -1,6 +1,5 @@
 plugins {
     kotlin("jvm") apply false
-    id("com.jfrog.bintray") version "1.8.5" apply false
     id("org.jetbrains.dokka") version "1.4.32" apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
