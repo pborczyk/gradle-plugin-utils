@@ -3,6 +3,7 @@ package org.unbrokendome.gradle.pluginutils.rules
 import org.gradle.api.Named
 import org.gradle.api.NamedDomainObjectCollection
 import org.unbrokendome.gradle.pluginutils.capitalizeWords
+import org.unbrokendome.gradle.pluginutils.decapitalize
 
 
 /**
@@ -66,7 +67,7 @@ class RuleNamePattern(
         val variablePart = targetName.substring(prefix.length, targetName.length - suffix.length)
         // first, assume the original source name was starting with lower case
         return sourceContainer.findByName(variablePart.decapitalize())
-            // otherwise also check for upper case
+        // otherwise also check for upper case
             ?: sourceContainer.findByName(variablePart)
             // otherwise do a "reverse" find by checking all existing source objects with the mapName function
             ?: sourceContainer.find { mapName(it.name) == targetName }

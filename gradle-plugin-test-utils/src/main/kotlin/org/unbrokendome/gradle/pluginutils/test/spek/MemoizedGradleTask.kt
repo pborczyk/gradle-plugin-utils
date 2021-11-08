@@ -5,6 +5,7 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.spekframework.spek2.dsl.LifecycleAware
 import org.spekframework.spek2.lifecycle.MemoizedValue
+import org.unbrokendome.gradle.pluginutils.decapitalize
 import kotlin.reflect.KClass
 
 
