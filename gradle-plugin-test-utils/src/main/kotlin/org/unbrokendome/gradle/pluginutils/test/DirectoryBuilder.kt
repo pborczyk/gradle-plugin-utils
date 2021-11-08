@@ -1,11 +1,17 @@
 package org.unbrokendome.gradle.pluginutils.test
 
+import org.reflections.Reflections
+import org.reflections.scanners.Scanners
+import org.reflections.util.ConfigurationBuilder
 import java.io.File
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.nio.file.StandardOpenOption
+import java.util.regex.Pattern
+import kotlin.io.path.createDirectories
+import kotlin.io.path.outputStream
 
 
 @DslMarker
@@ -123,5 +129,49 @@ private class DefaultDirectoryBuilder(override val path: Path) : DirectoryBuilde
             .use { writer ->
                 writer.append(contents.trimIndent())
             }
+    }
+}
+
+
+/**
+ * Copies the given classpath resources into this directory.
+ *
+ * This is intended as a way to populate a temporary local directory with resources packaged with the test
+ * (i.e. under `src/test/resources` or similar).
+ *
+ * @param prefix the prefix of the classpath resource names to copy
+ * @param classLoader the [ClassLoader] to use for locating and loading resources
+ */
+fun DirectoryBuilder.copyResources(
+    prefix: String,
+    classLoader: ClassLoader = Thread.currentThread().contextClassLoader
+) {
+    val fullPrefix = buildString {
+        if (!prefix.startsWith('/')) append('/')
+        append(prefix)
+        if (!prefix.endsWith('/')) append('/')
+    }
+    val pattern = Pattern.compile("^" + Pattern.quote(fullPrefix) + ".*")
+
+    val config = ConfigurationBuilder()
+        .addClassLoaders(classLoader)
+        .setScanners(Scanners.Resources)
+
+    val reflections = Reflections(config)
+    for (resourceName in reflections.getResources(pattern)) {
+
+        requireNotNull(classLoader.getResourceAsStream(resourceName)) {
+            "Resource not found: $resourceName"
+        }.use { input ->
+            val fileName = resourceName.removePrefix("test-resources/$prefix").removePrefix("/")
+            val filePath = path.resolve(fileName)
+            filePath.parent.createDirectories()
+
+            println("Copying resource $resourceName to file $filePath")
+
+            filePath.outputStream().use { output ->
+                input.copyTo(output)
+            }
+        }
     }
 }
