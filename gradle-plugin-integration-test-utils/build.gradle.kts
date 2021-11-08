@@ -13,7 +13,7 @@ dependencies {
     compileOnly(gradleApi())
     compileOnly(gradleTestKit())
 
-    compileOnly("org.junit.jupiter:junit-jupiter-api:5.7.0")
-    compileOnly("org.spekframework.spek2:spek-dsl-jvm:2.0.9")
-    compileOnly("com.willowtreeapps.assertk:assertk-jvm:0.22")
+    compileOnly(libs.junit.api)
+    compileOnly(libs.spek.dsl)
+    compileOnly(libs.assertk.core)
 }

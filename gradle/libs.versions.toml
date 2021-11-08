@@ -1,0 +1,21 @@
+[versions]
+assertk = "0.24"
+junit = "5.8.1"
+kotest = "4.6.3"
+mockk = "1.12.0"
+reflections = "0.10.2"
+spek2 = "2.0.17"
+
+[libraries]
+assertk-core = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
+
+junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+
+kotest-runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
+
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+
+reflections = { module = "org.reflections:reflections", version.ref = "reflections" }
+
+spek-dsl = { module = "org.spekframework.spek2:spek-dsl", version.ref = "spek2" }
