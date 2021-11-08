@@ -16,8 +16,3 @@ dependencies {
     "testImplementation"("com.willowtreeapps.assertk:assertk-jvm:0.22")
     "testImplementation"("io.mockk:mockk:1.10.5")
 }
-
-
-tasks.withType<Test> {
-    useJUnitPlatform()
-}

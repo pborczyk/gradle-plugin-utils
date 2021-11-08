@@ -4,12 +4,6 @@ plugins {
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
-allprojects {
-    repositories {
-        mavenCentral()
-    }
-}
-
 
 subprojects {
 

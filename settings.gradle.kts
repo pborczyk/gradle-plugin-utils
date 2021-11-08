@@ -13,6 +13,12 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
 rootProject.name = "gradle-plugin-utils-parent"
 
 include(
