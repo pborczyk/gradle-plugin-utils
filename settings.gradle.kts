@@ -7,10 +7,15 @@ pluginManagement {
         mavenCentral()
     }
 
+    val dokkaVersion: String by settings
+
     resolutionStrategy.eachPlugin {
         if (requested.id.namespace == "org.jetbrains.kotlin" ||
                 requested.id.namespace.orEmpty().startsWith("org.jetbrains.kotlin.")) {
             useVersion(embeddedKotlinVersion)
+        }
+        if (requested.id.toString() == "org.jetbrains.dokka") {
+            useVersion(dokkaVersion)
         }
     }
 }

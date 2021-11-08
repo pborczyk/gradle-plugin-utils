@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") apply false
-    id("org.jetbrains.dokka") version "1.4.32" apply false
+    id("org.jetbrains.dokka") apply false
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
 }
 
@@ -98,8 +98,10 @@ subprojects {
 
     plugins.withId("org.jetbrains.dokka") {
 
+        val dokkaVersion: String by extra
+
         dependencies {
-            "dokkaJavadocPlugin"("org.jetbrains.dokka:kotlin-as-java-plugin:1.4.20")
+            "dokkaJavadocPlugin"("org.jetbrains.dokka:kotlin-as-java-plugin:$dokkaVersion")
         }
 
         tasks.withType<Jar>().matching { it.name == "javadocJar" }
