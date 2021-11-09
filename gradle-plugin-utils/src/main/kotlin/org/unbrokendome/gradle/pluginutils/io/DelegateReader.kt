@@ -8,12 +8,25 @@ import java.nio.CharBuffer
 /**
  * Implementation of [FilterReader] that delegates all [Reader] methods to another reader.
  */
+@Suppress("LeakingThis")
 abstract class DelegateReader(input: Reader) : FilterReader(input) {
+
+    /**
+     * Creates the delegate [Reader].
+     *
+     * @param input the input [Reader]
+     * @return the delegate [Reader]
+     */
+    protected abstract fun createDelegateReader(input: Reader): Reader
+
+    private val lazyDelegate = lazy(LazyThreadSafetyMode.NONE) {
+        createDelegateReader(`in`)
+    }
 
     /**
      * The delegate [Reader].
      */
-    protected abstract val delegate: Reader
+    private val delegate: Reader by lazyDelegate
 
 
     override fun read(): Int =
@@ -52,6 +65,11 @@ abstract class DelegateReader(input: Reader) : FilterReader(input) {
         delegate.reset()
 
 
-    override fun close() =
-        delegate.close()
+    override fun close() {
+        if (lazyDelegate.isInitialized()) {
+            delegate.close()
+        } else {
+            `in`.close()
+        }
+    }
 }

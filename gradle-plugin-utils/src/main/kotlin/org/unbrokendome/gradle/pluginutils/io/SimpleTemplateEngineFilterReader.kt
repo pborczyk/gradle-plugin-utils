@@ -3,9 +3,7 @@ package org.unbrokendome.gradle.pluginutils.io
 import groovy.text.SimpleTemplateEngine
 import org.gradle.api.file.ContentFilterable
 import org.unbrokendome.gradle.pluginutils.io.DelegateReader
-import java.io.Reader
-import java.io.StringReader
-import java.io.StringWriter
+import java.io.*
 
 
 /**
@@ -43,18 +41,17 @@ internal class SimpleTemplateEngineFilterReader(
     var properties: Map<String, *> = emptyMap<String, Any?>()
     var escapeBackslash: Boolean = false
 
+    override fun createDelegateReader(input: Reader): Reader {
 
-    override val delegate: Reader by lazy(LazyThreadSafetyMode.NONE) {
-
-        val template = `in`.use { input ->
+        val template = input.buffered().use {
             val engine = SimpleTemplateEngine()
             engine.isEscapeBackslash = escapeBackslash
-            engine.createTemplate(input)
+            engine.createTemplate(it)
         }
 
         val writer = StringWriter()
         template.make(properties).writeTo(writer)
 
-        StringReader(writer.toString())
+        return StringReader(writer.toString())
     }
 }
