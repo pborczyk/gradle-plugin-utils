@@ -110,6 +110,7 @@ subprojects {
             }
 
         tasks.withType<org.jetbrains.dokka.gradle.DokkaTask> {
+            dependsOn("classes")
             dokkaSourceSets {
                 named("main") {
                     sourceLink {
