@@ -11,6 +11,7 @@ assertk-core = { module = "com.willowtreeapps.assertk:assertk", version.ref = "a
 
 junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
 
+kotest-api = { module = "io.kotest:kotest-framework-api", version.ref = "kotest" }
 kotest-runner = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 kotest-property = { module = "io.kotest:kotest-property", version.ref = "kotest" }
 

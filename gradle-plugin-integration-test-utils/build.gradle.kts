@@ -14,6 +14,7 @@ dependencies {
     compileOnly(gradleTestKit())
 
     compileOnly(libs.junit.api)
+    compileOnly(libs.kotest.api)
     compileOnly(libs.spek.dsl)
     compileOnly(libs.assertk.core)
 }
