@@ -1,5 +1,5 @@
 = Gradle Plugin Utilities
-:version: 0.3.0
+:version: 0.4.0
 :groupId: org.unbroken-dome.gradle-plugin-utils
 :artifactId: gradle-plugin-utils-bom
 
