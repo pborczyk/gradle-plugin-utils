@@ -3,12 +3,19 @@ package org.unbrokendome.gradle.pluginutils.test
 import org.gradle.BuildResult
 import org.gradle.api.Task
 import org.gradle.api.internal.TaskInternal
-import org.gradle.api.internal.TaskOutputsInternal
 import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.tasks.TaskOutputs
 import org.gradle.internal.operations.BuildOperationDescriptor
 import org.gradle.internal.operations.BuildOperationExecutor
 import org.gradle.workers.WorkerExecutor
+
+
+enum class TaskOutcome {
+    SUCCESS,
+    FAILED,
+    UP_TO_DATE,
+    SKIPPED,
+}
 
 
 /**
@@ -23,8 +30,16 @@ import org.gradle.workers.WorkerExecutor
  *
  * @receiver the [Task] to execute
  * @param checkUpToDate if `true`, run up-to-date checks first
+ * @param checkOnlyIf if `true`, run only-if checks first (includes checking the [enabled][Task.getEnabled] property)
+ * @param rethrowExceptions if `true`, re-throw any exceptions that occur in the task. If `false`, return an
+ *        outcome of [TaskOutcome.FAILED] if the task throws an exception
+ * @return a [TaskOutcome] indicating the outcome of the task
  */
-fun Task.execute(checkUpToDate: Boolean = true) {
+fun Task.execute(
+    checkUpToDate: Boolean = true, checkOnlyIf: Boolean = true, rethrowExceptions: Boolean = true
+): TaskOutcome {
+
+    this as TaskInternal
 
     val services = (project as ProjectInternal).services
 
@@ -32,14 +47,19 @@ fun Task.execute(checkUpToDate: Boolean = true) {
     val workerExecutor = services[WorkerExecutor::class.java]
 
     val buildOperation = buildOperationExecutor.start(BuildOperationDescriptor.displayName(name))
+    var buildOperationResult = BuildResult(project.gradle, null)
 
     try {
+        if (checkOnlyIf && !onlyIf.isSatisfiedBy(this)) {
+            return TaskOutcome.SKIPPED
+        }
+
         if (checkUpToDate) {
-            val upToDateSpec = (outputs as TaskOutputsInternal).upToDateSpec
-            val upToDate = !upToDateSpec.isEmpty && upToDateSpec.isSatisfiedBy(this as TaskInternal)
+            val upToDateSpec = outputs.upToDateSpec
+            val upToDate = !upToDateSpec.isEmpty && upToDateSpec.isSatisfiedBy(this)
             if (upToDate) {
                 didWork = false
-                return
+                return TaskOutcome.UP_TO_DATE
             }
         }
 
@@ -48,9 +68,18 @@ fun Task.execute(checkUpToDate: Boolean = true) {
         }
 
         workerExecutor.await()
+        return if (didWork) TaskOutcome.SUCCESS else TaskOutcome.UP_TO_DATE
 
+    } catch (ex: Exception) {
+        buildOperationResult = BuildResult(project.gradle, ex)
+        if (rethrowExceptions) {
+            throw ex
+        } else {
+            buildOperation.failed(ex)
+            return TaskOutcome.FAILED
+        }
     } finally {
-        buildOperation.setResult(BuildResult(project.gradle, null))
+        buildOperation.setResult(buildOperationResult)
     }
 }
 
@@ -63,6 +92,5 @@ fun Task.execute(checkUpToDate: Boolean = true) {
  */
 fun Task.isSkipped(): Boolean {
     this as TaskInternal
-    return onlyIf.isSatisfiedBy(this)
+    return !onlyIf.isSatisfiedBy(this)
 }
-
