@@ -144,7 +144,6 @@ fun LifecycleAware.gradleProject(): MemoizedGradleProject =
  */
 fun LifecycleAware.setupGradleProject(block: MemoizedGradleProject.() -> Unit): MemoizedValue<Project> {
 
-    @Suppress("UNUSED_VARIABLE")
     val project: Project by gradleProject().also(block)
 
     return memoized()

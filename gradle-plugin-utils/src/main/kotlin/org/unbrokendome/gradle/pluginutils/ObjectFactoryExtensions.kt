@@ -41,6 +41,5 @@ inline fun <reified T : Any> ObjectFactory.setProperty(): SetProperty<T> =
  * @param K the type of key
  * @param V the type of value
  */
-@Suppress("UnstableApiUsage")
 inline fun <reified K : Any, reified V : Any> ObjectFactory.mapProperty(): MapProperty<K, V> =
     mapProperty(K::class.javaObjectType, V::class.javaObjectType)

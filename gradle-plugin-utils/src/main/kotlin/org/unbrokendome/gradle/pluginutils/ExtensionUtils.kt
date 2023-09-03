@@ -1,3 +1,5 @@
+@file:Suppress("DeprecatedCallableAddReplaceWith", "DEPRECATION")
+
 package org.unbrokendome.gradle.pluginutils
 
 import org.gradle.api.plugins.Convention
@@ -67,6 +69,7 @@ inline fun <reified T : Any> Any.requiredExtension(): T =
  * @param <T> the convention plugin type
  * @return the convention plugin object, or `null` if it does not exist
  */
+@Deprecated("prefer extension objects over conventions")
 inline fun <reified T : Any> Any.conventionPlugin(): T? =
     ((this as? ExtensionAware)?.extensions as? Convention)?.findPlugin(T::class.java)
 
@@ -80,5 +83,6 @@ inline fun <reified T : Any> Any.conventionPlugin(): T? =
  * @throws ClassCastException if the receiver object does not support conventions
  * @throws IllegalStateException if the convention plugin does not exist
  */
+@Deprecated("prefer extension objects over conventions")
 inline fun <reified T : Any> Any.requiredConventionPlugin(): T =
     ((this as ExtensionAware).extensions as Convention).getPlugin(T::class.java)

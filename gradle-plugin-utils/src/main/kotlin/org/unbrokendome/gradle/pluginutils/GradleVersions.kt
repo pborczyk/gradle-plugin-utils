@@ -21,6 +21,7 @@ object GradleVersions {
     val Version_4_8 by "4.8"
     val Version_4_9 by "4.9"
     val Version_4_10 by "4.10"
+
     val Version_5_0 by "5.0"
     val Version_5_1 by "5.1"
     val Version_5_2 by "5.2"
@@ -28,6 +29,7 @@ object GradleVersions {
     val Version_5_4 by "5.4"
     val Version_5_5 by "5.5"
     val Version_5_6 by "5.6"
+
     val Version_6_0 by "6.0"
     val Version_6_1 by "6.1"
     val Version_6_2 by "6.2"
@@ -37,6 +39,19 @@ object GradleVersions {
     val Version_6_6 by "6.6"
     val Version_6_7 by "6.7"
     val Version_6_8 by "6.8"
+    val Version_6_9 by "6.9"
+
+    val Version_7_0 by "7.0"
+    val Version_7_1 by "7.1"
+    val Version_7_2 by "7.2"
+    val Version_7_3 by "7.3"
+    val Version_7_4 by "7.4"
+    val Version_7_5 by "7.5"
+    val Version_7_6 by "7.6"
+
+    val Version_8_1 by "8.1"
+    val Version_8_2 by "8.2"
+    val Version_8_3 by "8.3"
 
     @Suppress("NOTHING_TO_INLINE")
     private inline operator fun String.getValue(thisRef: Any?, property: KProperty<*>): GradleVersion {
