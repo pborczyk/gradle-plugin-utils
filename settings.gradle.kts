@@ -1,5 +1,3 @@
-enableFeaturePreview("VERSION_CATALOGS")
-
 pluginManagement {
 
     repositories {
@@ -14,12 +12,14 @@ pluginManagement {
                 requested.id.namespace.orEmpty().startsWith("org.jetbrains.kotlin.")) {
             useVersion(embeddedKotlinVersion)
         }
-        if (requested.id.toString() == "org.jetbrains.dokka") {
-            useVersion(dokkaVersion)
-        }
+    }
+
+    plugins {
+        id("org.jetbrains.dokka") version dokkaVersion apply false
     }
 }
 
+@Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositories {
         mavenCentral()

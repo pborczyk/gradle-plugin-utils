@@ -1,39 +1,41 @@
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
+import java.net.URI
+
 plugins {
     kotlin("jvm") apply false
     id("org.jetbrains.dokka") apply false
-    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+    id("io.github.gradle-nexus.publish-plugin") version "1.3.0"
 }
 
 
 subprojects {
 
     plugins.withId("org.jetbrains.kotlin.jvm") {
+
+        configure<KotlinJvmProjectExtension> {
+            jvmToolchain(11)
+        }
+
         dependencies {
             "compileOnly"(kotlin("stdlib"))
             "compileOnly"(kotlin("stdlib-jdk8"))
-        }
-
-        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
         }
     }
 
 
     plugins.withType<JavaPlugin> {
 
+        configure<JavaPluginExtension> {
+            withSourcesJar()
+            withJavadocJar()
+        }
+
         tasks.withType<Test> {
             useJUnitPlatform()
-            systemProperty("java.io.tmpdir", "$buildDir/tmp")
+            systemProperty("java.io.tmpdir", layout.buildDirectory.dir("tmp"))
         }
 
         plugins.withType<MavenPublishPlugin> {
-
-            with(the<JavaPluginExtension>()) {
-                withSourcesJar()
-                withJavadocJar()
-            }
 
             with(the<PublishingExtension>()) {
                 publications.create<MavenPublication>("mavenJava") {
@@ -86,7 +88,7 @@ subprojects {
         publishing.repositories {
             maven {
                 name = "local"
-                url = uri("${rootProject.buildDir}/repos/releases")
+                url = file(layout.buildDirectory.dir("repos/releases")).toURI()
             }
         }
 
@@ -116,7 +118,7 @@ subprojects {
                     sourceLink {
                         val githubUrl = project.extra["github.url"] as String
                         localDirectory.set(project.file("src/main/kotlin"))
-                        remoteUrl.set(java.net.URL("$githubUrl/tree/master/"))
+                        remoteUrl.set(URI("$githubUrl/tree/master/").toURL())
                         remoteLineSuffix.set("#L")
                     }
                 }
@@ -126,8 +128,6 @@ subprojects {
 }
 
 
-nexusPublishing {
-    repositories {
-        sonatype()
-    }
+nexusPublishing.repositories {
+    sonatype()
 }
