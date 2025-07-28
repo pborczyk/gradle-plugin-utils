@@ -13,7 +13,7 @@ subprojects {
     plugins.withId("org.jetbrains.kotlin.jvm") {
 
         configure<KotlinJvmProjectExtension> {
-            jvmToolchain(11)
+            jvmToolchain(17)
         }
 
         dependencies {
@@ -32,7 +32,10 @@ subprojects {
 
         tasks.withType<Test> {
             useJUnitPlatform()
-            systemProperty("java.io.tmpdir", layout.buildDirectory.dir("tmp"))
+            jvmArgs(
+                "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+                            "--add-opens", "java.base/java.util=ALL-UNNAMED"
+            )
         }
 
         plugins.withType<MavenPublishPlugin> {
